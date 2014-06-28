@@ -1,4 +1,6 @@
 nickname: &str
+    message: >
+        Give your relay a good nickname!
     type:       string
 
 contactinfo:
@@ -13,6 +15,7 @@ orbindaddress: &ip
 
 exitpolicy: &policy
     type:       policy
+    default:    
 
 dirbindaddress:
     type:       ip
@@ -43,7 +46,7 @@ excludenodes:
         $53c4c4e1741ca61ad4f09cc9eae8abe1fd92f08b
 
 servertransportplugin:
-    type:       complicated #yes
+    type:       transport
     default:    obfs3,scramblesuit exec /usr/bin/obfsproxy managed
     pref:       recommended
     template:   bridge.template

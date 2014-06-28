@@ -12,27 +12,21 @@ env = Environment(loader=load)
 
 template = env.loader.get_source(env, "torrc.example")
 
+
 variables = meta.find_undeclared_variables(env.parse(template))
 options = yaml.load(open("options.yaml", "r").read())
 
-
-
 def check_ip(val):
     try:
-        ipaddress.ip_address(val)
+        if len(val.split(":")) == 2:
+            ip, port = val.split(":")
+            int(port)
+        else:
+            ip = val
+        ipaddress.ip_address(ip)
         return val
     except Exception as e:
-        if ":" in val:
-            try:
-                # Would probably be better if we just checked
-                # the lenght?
-                ip, port = val.split(":")
-                int(port)
-                ipaddress.ip_address(ip)
-                return val
-            except: raise e
-        else:
-            raise e
+        raise e
 
 
 def check_policy(val):
@@ -54,8 +48,9 @@ _type = {"string": str,
          "password": hash_function}
 
 
-
-def get_input(inn=None, type=None):
+def get_input(inn=None, type=None, option=None):
+    if option.get("message"):
+        print(option["message"], end="")
     stdin = input("Give me a %s: " % str(inn))
     try:
         ret = _type[type](stdin)
@@ -64,24 +59,33 @@ def get_input(inn=None, type=None):
         print(e)
         print("Nope sorry, wrong type")
 
+def main():
+    print('''Make neat menu!''')
+    print("Available templates:\n")
+    print("".join(load.list_templates()))
+    print("")
+
+    _out_map = {}
+
+    for i in variables:
+        if i in list(options.keys()):
+            v = get_input(inn=i, option=options[i], type=options[i]["type"])
+            _out_map[i] = v
 
 
-print('''Make neat menu!''')
-print("Available templates")
-print("".join(load.list_templates()))
+    template = env.get_template('torrc.example')
+    print("\n\n---------------")
+    print(template.render(**_out_map))
 
+def choose_options(l):
+    options = dict(enumerate(l, start=1))
+    print("\n".join("{0}) {1}".format(*i) for i in options.items()))
+    inn = input("Select a template: ")
+    if int(inn) in list(options.keys()):
+        return options[int(inn)]
+    else:
+        print("Not an valid option!")
 
-_out_map = {}
-
-for i in variables:
-    if i in list(options.keys()):
-        v = get_input(inn=i, type=options[i]["type"])
-        _out_map[i] = v
-
-
-template = env.get_template('torrc.example')
-print(template.render(**_out_map))
-
-
+print(choose_options(["options1", "options"]))
 
 
