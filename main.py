@@ -10,10 +10,6 @@ load = FileSystemLoader('./templates')
 
 env = Environment(loader=load)
 
-template = env.loader.get_source(env, "torrc.example")
-
-
-variables = meta.find_undeclared_variables(env.parse(template))
 options = yaml.load(open("options.yaml", "r").read())
 
 def check_ip(val):
@@ -59,13 +55,14 @@ def get_input(inn=None, type=None, option=None):
         print(e)
         print("Nope sorry, wrong type")
 
-def main():
-    print('''Make neat menu!''')
-    print("Available templates:\n")
-    print("".join(load.list_templates()))
-    print("")
 
+def main():
+    chosen_template = choose_options(load.list_templates())
     _out_map = {}
+
+    template = env.loader.get_source(env, chosen_template)
+    variables = meta.find_undeclared_variables(env.parse(template))
+
 
     for i in variables:
         if i in list(options.keys()):
@@ -73,19 +70,26 @@ def main():
             _out_map[i] = v
 
 
-    template = env.get_template('torrc.example')
-    print("\n\n---------------")
-    print(template.render(**_out_map))
+    template = env.get_template(chosen_template)
+    print("")
+    return template.render(**_out_map)
+
 
 def choose_options(l):
+    print("Available Templates")
+
     options = dict(enumerate(l, start=1))
     print("\n".join("{0}) {1}".format(*i) for i in options.items()))
-    inn = input("Select a template: ")
+
+    inn = input("\nSelect a template: ")
+    print("")
+
     if int(inn) in list(options.keys()):
         return options[int(inn)]
     else:
         print("Not an valid option!")
 
-print(choose_options(["options1", "options"]))
 
+if __name__ == "__main__":
+    print(main())
 
