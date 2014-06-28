@@ -1,0 +1,7 @@
+nickname:
+      type:         string
+      required:     yes
+orport:
+    type:       integer
+    requires:   yes
+    template:   torrc.example
