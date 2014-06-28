@@ -1,28 +1,28 @@
-nickname: &str
+Nickname: &str
     message: >
         Give your relay a good nickname!
     type:       string
 
-contactinfo:
+ContactInfo:
     pref:       recommended
     type:       string
 
-orport: &int
+ORPort: &int
     type:       integer
 
-orbindaddress: &ip
+ORBindAddress: &ip
     type:       ip
 
-exitpolicy: &policy
+ExitPolicy: &policy
     type:       policy
     default:   
         all:    reject *:*
         exit.template:      accept <add something>
 
-dirbindaddress:
+DirBindAddress:
     type:       ip
 
-excludenodes:
+ExcludeNodes:
     type:       hash
     pref:       recommended
     default: > 
@@ -47,15 +47,15 @@ excludenodes:
         $28151be14cb5c22a236163c3e97409d6fd607356, $1b777f2c879c76fc529d1ec63508aad0e1759e79, \
         $53c4c4e1741ca61ad4f09cc9eae8abe1fd92f08b
 
-servertransportplugin:
+ServerTransportPlugin:
     type:       transport
     default:    obfs3 exec /usr/bin/obfsproxy managed
     pref:       recommended
-    template:   bridge.template
+    template:   torrc.template
 
-controlport: *int
+ControlPort: *int
 
-hashedcontrolpassword:
+HashedControlPassword:
     type:       password
     pref:       recommended
-    present:    controlport
+    present:    ControlPort

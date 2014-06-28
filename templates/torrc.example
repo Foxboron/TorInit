@@ -1,3 +1,4 @@
-Nickname {{ nickname }}
-ORPort {{ orport }}
-ORBindAddress {{ orbindaddress }}
+Nickname {{ Nickname }}
+ORPort {{ ORPort }}
+ORBindAddress {{ ORBindAddress }}
+Controlport {{ ControlPort }}
