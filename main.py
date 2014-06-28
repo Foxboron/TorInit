@@ -47,6 +47,9 @@ _type = {"string": str,
 def get_input(inn=None, type=None, option=None):
     if option.get("message"):
         print(option["message"], end="")
+
+    # TODO: Factorise so the types handles their own cases.
+    # TODO: Handle default options.
     stdin = input("Give me a %s: " % str(inn))
     try:
         ret = _type[type](stdin)
@@ -92,22 +95,26 @@ def main():
     chosen_template = choose_options(load.list_templates())
     _out_map = {}
 
+    # Jinja magic to get all variables from the template
     template = env.loader.get_source(env, chosen_template)
     variables = meta.find_undeclared_variables(env.parse(template))
 
-
+    # Iterate over the jinja variables and ask user to set them
+    # Based on the restrictions in `options.yaml`
     for i in variables:
         if i in list(options.keys()):
             v = get_input(inn=i, option=options[i], type=options[i]["type"])
             _out_map[i] = v
 
+    # Get any recommended options, based on the variables set or
+    # Template name.
     recommended = recommend_options(_out_map, chosen_template)
-
     print("\nForce set recommended options")
     missingo = {}
     for k,v in recommended.items():
         val = get_input(inn=k, option=v, type=v["type"])
-        missingo[k]= val
+        if val:
+            missingo[k]= val
 
 
     # Better solution to add missing options would be better
