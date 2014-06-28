@@ -51,7 +51,7 @@ ServerTransportPlugin:
     type:       transport
     default:    obfs3 exec /usr/bin/obfsproxy managed
     pref:       recommended
-    template:   torrc.template
+    template:   torrc.example
 
 ControlPort: *int
 

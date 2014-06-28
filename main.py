@@ -62,7 +62,13 @@ def recommend_options(map, name):
     ret = {}
 
     for k,v in options.items():
-        if v.get("present") in set_options and v.get("pref") == "recommended":
+        # Check if any options present got a recommended
+        # option based on set settings or template name
+        if v.get("present") in set_options and\
+           v.get("pref") == "recommended"or\
+           v.get("template") == name and\
+           v.get("pref") == "recommended":
+
             ret[k] = v
     return ret
 
