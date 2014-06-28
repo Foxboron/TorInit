@@ -49,7 +49,7 @@ excludenodes:
 
 servertransportplugin:
     type:       transport
-    default:    obfs3,scramblesuit exec /usr/bin/obfsproxy managed
+    default:    obfs3 exec /usr/bin/obfsproxy managed
     pref:       recommended
     template:   bridge.template
 
