@@ -16,7 +16,7 @@ orbindaddress: &ip
 exitpolicy: &policy
     type:       policy
     default:   
-        all:    reject *:*
+        al#l:    reject *:*
         exit.template:      accept <add something>
 
 dirbindaddress:
